@@ -3,13 +3,22 @@ import { useState } from "react";
 
 const Table = ({ contacts }) => {
   const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (e) => setFilter(e.target.value);
-
+  const handleSearchTermChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
   let filteredContacts = [];
   if (filter === "all") {
     filteredContacts = contacts;
   } else {
     filteredContacts = contacts.filter((contact) => contact.group === filter);
+  }
+  if (searchTerm) {
+    filteredContacts = filteredContacts.filter(
+      (contact) =>
+        contact.name.includes(searchTerm) || contact.email.includes(searchTerm)
+    );
   }
 
   return (
@@ -23,6 +32,12 @@ const Table = ({ contacts }) => {
             <option value="home">Home</option>
             <option value="office">Office</option>
           </select>
+          <input
+            type="search"
+            placeholder="Search Here"
+            value={searchTerm}
+            onChange={handleSearchTermChange}
+          />
         </p>
       </div>
       <table>
